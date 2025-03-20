@@ -22,13 +22,37 @@ class _ListaTarefasState extends State<ListaTarefas> {
     }
   }
 
+  void _confirmarRemocaoTarefas() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirmar remoção"),
+          content: Text("Deseja realmente apagar todas as tarefas concluídas?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _removerTarefa();
+              },
+              child: Text("Confirmar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _removerTarefa() {
     setState(() {
       _tarefas.removeWhere((tarefa) => tarefa['concluida']);
     });
   }
 
-  // construir estrutura de widget
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: Text("Lista de Tarefas")),
@@ -74,7 +98,7 @@ class _ListaTarefasState extends State<ListaTarefas> {
       ),
     ),
     floatingActionButton: FloatingActionButton(
-      onPressed: _removerTarefa,
+      onPressed: _confirmarRemocaoTarefas,
       child: Icon(Icons.recycling),
     ),
   );
